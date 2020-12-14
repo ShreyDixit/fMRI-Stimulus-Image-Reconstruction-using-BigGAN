@@ -23,4 +23,4 @@ python train.py
 
 ## Results
 
-![alt text](results\result1.png?raw=true)
+![alt text](https://github.com/ShreyDixit/fMRI-Stimulus-Image-Reconstruction-using-BigGAN/blob/main/results/result1.png)
