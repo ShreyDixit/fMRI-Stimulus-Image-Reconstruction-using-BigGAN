@@ -20,3 +20,7 @@ Train the model using
 ```
 python train.py
 ```
+
+## Results
+
+![alt text](results\result1.png?raw=true)

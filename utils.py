@@ -52,7 +52,7 @@ class VGG19_Loss():
     def __call__(self, input, target):
         input_features = self.truncated_vgg19(input)
         target_features = self.truncated_vgg19(target)
-        return mse_loss(input_features, target_features) #+ mse_loss(input, target)
+        return mse_loss(input_features, target_features)/0.65 + mse_loss(input, target)/0.14
     
 
 class kamitani_data_handler():
@@ -246,10 +246,23 @@ class fMRI_DataSet(Dataset):
 def Create_DLs(path, subject, bs, apply_pca=True):
     kamitani_data = kamitani_data_handler(f"{path}{subject}.mat")
     
-    train_act, test_act, test_act_avg = kamitani_data.get_data()
+    ROIs = ['ROI_VC', 'ROI_V1', 'ROI_V2', 'ROI_V3', 'ROI_V4']
+    
+    train_act_all, test_act_all, test_act_avg_all = [], [], []
+    for ROI in ROIs:
+        train_act, test_act, test_act_avg = kamitani_data.get_data(roi = ROI)
+        train_act_all.append(train_act)
+        test_act_all.append(test_act)
+        test_act_avg_all.append(test_act_avg)
+        
+    train_act = np.concatenate(train_act_all, 1)
+    test_act = np.concatenate(test_act_all, 1)
+    test_act_avg = np.concatenate(test_act_avg_all, 1)
+    
     train_labels, test_labels = kamitani_data.get_labels()
     snr = calc_snr(test_act, test_act_avg, test_labels)
     mask = (snr/snr.mean())>0.8
+    print(sum(mask))
     
     train_act = train_act[:, mask]
     test_act = test_act[:, mask]

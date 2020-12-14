@@ -250,6 +250,16 @@ class Generator(nn.Module):
     # Apply batchnorm-relu-conv-tanh at output
     return torch.tanh(self.output_layer(h))/2 + 0.5
 
+class FC_ResNet(nn.Module):
+    def __init__(self, size):
+        super(FC_ResNet, self).__init__()
+        self.fc1 = nn.Linear(size, size)
+        self.fc2 = nn.Linear(size, size)
+        
+    def forward(self, input):
+        out = F.leaky_relu(self.fc1(input), 0.1)
+        return self.fc2(out) + input
+
 class voxels_to_z(nn.Module):
     def __init__(self, num_voxels, z_dim):
         super(voxels_to_z, self).__init__()
@@ -257,10 +267,12 @@ class voxels_to_z(nn.Module):
                                    nn.LeakyReLU(0.1),
                                    nn.Linear(256, z_dim),
                                    nn.LeakyReLU(0.1),
-                                   nn.Linear(z_dim, z_dim),
-                                   nn.LeakyReLU(0.1),
-                                   nn.Linear(z_dim, z_dim),
-                                   nn.LayerNorm(z_dim, elementwise_affine=False))
+                                   FC_ResNet(z_dim),
+                                   nn.BatchNorm1d(z_dim, affine=False),
+                                   FC_ResNet(z_dim),
+                                   nn.BatchNorm1d(z_dim, affine=False),
+                                   FC_ResNet(z_dim),
+                                   nn.BatchNorm1d(z_dim, affine=False),)
     def forward(self, input):
         return self.layers(input)
     
