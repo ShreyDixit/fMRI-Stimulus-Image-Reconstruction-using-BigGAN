@@ -6,17 +6,17 @@
 http://brainliner.jp/data/brainliner/Generic_Object_Decoding
 ```
 
-2. Request for images used in this experiment from Kamitani Lab and place them in data folder
+2. Request for images used in this experiment from Kamitani Lab and place them in the data folder
 ```
 https://docs.google.com/forms/d/e/1FAIpQLSfuAF-tr4ZUBx2LvxavAjjEkqqUOj0VpqpeJNCe-IcdlqJekg/viewform
 ```
 
-3. Download the pretrained BigGAN from place it in models folder
+3. Download the pretrained BigGAN from drive place it in the models folder
 ```
 https://drive.google.com/file/d/1eXGjqs3Vh8W30NXmppWyl_eomXzrzF_s/view?usp=sharing
 ```
 
-Train the model using
+4. Train the model using
 ```
 python train.py
 ```
